@@ -1,0 +1,7 @@
+#!/usr/bin/env ruby
+require 'timeout'
+require 'rubygems' unless defined?(gem)
+$LOAD_PATH << File.expand_path(File.join(File.dirname(__FILE__), '..', 'lib'))
+require 'stdout_hook/runner'
+
+StdoutHook::Runner.run(ARGV)
