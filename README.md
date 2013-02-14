@@ -40,7 +40,7 @@ or using pipe:
 
 #### for Treasure Data
 
-* --apikey: TD account API key (default is ENV["TD_API_KEY"])
+* --apikey: TD account API key (default is ENV["TREASURE_DATA_API_KEY"])
 * --use_ssl: Enable SSL connection to TD (default is false)
 
 #### for Fluentd

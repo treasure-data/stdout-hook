@@ -21,7 +21,7 @@ module StdoutHook
       require 'optparse'
 
       @mode = 'td'
-      @apikey = ENV['TD_API_KEY']
+      @apikey = ENV['TREASURE_DATA_API_KEY'] || ENV['TD_API_KEY']
       @use_ssl = false
       @opt = setup_options
     end
