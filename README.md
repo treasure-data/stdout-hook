@@ -36,7 +36,7 @@ or using pipe:
 
 ### Option
 
-* --f: fluentd mode (default is 'td')
+* --mode: Choose running mode (default is 'td')
 
 #### for Treasure Data
 
