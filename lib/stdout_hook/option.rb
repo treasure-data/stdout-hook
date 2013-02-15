@@ -27,8 +27,10 @@ module StdoutHook
     end
 
     def parse!(argv)
+      require 'shellwords'
+
       @opt.parse!(argv)
-      @command = argv.join(' ') unless argv.empty?
+      @command = Shellwords.shelljoin(argv) unless argv.empty?
 
       case @mode
       when 'td'
