@@ -15,8 +15,8 @@ Gem::Specification.new do |s|
   s.executables = `git ls-files -- bin/*`.split("\n").map{ |f| File.basename(f) }
   s.require_paths = ["lib"]
 
-  s.add_dependency 'td-logger', '~= 0.3.19'
+  s.add_dependency 'td-logger', '~> 0.3.19'
   s.add_development_dependency 'bundler', '>= 1.0.0'
   s.add_development_dependency 'rake', '>= 0.8.7'
-  s.add_development_dependency 'rspec', '>= 2.9.'
+  s.add_development_dependency 'rspec', '>= 2.9.0'
 end
