@@ -7,29 +7,41 @@ module StdoutHook
     def initialize(opt)
       require 'yajl'
 
+      @opt = opt
       @plugin = load_plugin(opt)
-      @regexp = /^@\[(?<tag>[^ ]*)\] (?<record>{.*})$/
-      # @regexp = /^@\[(?<db>[^ ]*)\.(?<table>[^ ]*)\] (?<record>{.*})$/
+      @regexp = /^\s*@\[(?<tag>[^ ]*)\] (?<record>{.*})\s*$/
     end
 
     def parse(input)
       until input.eof?
         break unless log = input.gets
 
-        text = log.strip
-        m = @regexp.match(text)
+        m = @regexp.match(log)
         unless m
-          puts text
+          puts log
           next
         end
 
-        route(m['tag'], Time.now.to_i, Yajl.load(m['record']))
+        begin
+          record = Yajl.load(m['record'])
+        rescue => e
+          STDERR.puts "Failed to parse JSON: #{e}"
+          next
+        end
+
+        route(m['tag'], Time.now.to_i, record)
       end
     end
 
     def route(tag, time, record)
       # TODO: Chain plugins?
-      @plugin.send(tag, time, record)
+      begin 
+        @plugin.send(tag, time, record)
+      rescue => e
+        STDERR.puts "Failed to send an event. Re-create a plugin: #{e}"
+        @plugin = load_plugin(@opt)
+        @plugin.send(tag, time, record)
+      end
     end
 
     private
