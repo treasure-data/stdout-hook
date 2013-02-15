@@ -1,7 +1,7 @@
 module StdoutHook
   module Plugin
     class Test
-      def initialize(opts = {})
+      def initialize(opt)
       end
 
       def close

@@ -45,7 +45,7 @@ module StdoutHook
     def setup_options
       opt = OptionParser.new
 
-      opt.on('-m', '--mode MODE', "Choose running mode (default is 'td')") { |s|
+      opt.on('-m', '--mode MODE', "Choose running mode (default: 'td')") { |s|
         @mode = s
       }
       opt.on('-p', '--port PORT', "fluentd tcp port (default: 24224)", Integer) { |i|
@@ -54,10 +54,10 @@ module StdoutHook
       opt.on('-h', '--host HOST', "fluentd host (default: localhost)") { |s|
         @host = s
       }
-      opt.on('-k', '--apikey TD_API_KEY', "API key for TreasureData service") { |s|
+      opt.on('-k', '--apikey KEY', "API key for TreasureData service") { |s|
         @apikey = s
       }
-      opt.on('-s', '--use_ssl', "Use SSL for uploading data to TreasureData", TrueClass) { |b|
+      opt.on('-s', '--use_ssl', "Enable SSL for uploading data to TreasureData service", TrueClass) { |b|
         @use_ssl = true
       }
 

@@ -1,4 +1,3 @@
-require 'stdout_hook/version'
 require 'stdout_hook/option'
 require 'stdout_hook/router'
 
@@ -23,7 +22,7 @@ module StdoutHook
       router = Router.new(opt)
 
       if opt.command.nil?
-        run_with_stdin(router)
+        run_with_stdin(router, opt)
       else
         run_with_spawn(router, opt)
       end
@@ -57,7 +56,7 @@ module StdoutHook
       end
     end
 
-    def self.run_with_stdin(router)
+    def self.run_with_stdin(router, opt)
       router.parse(STDIN)
     rescue Interrupt
       router.parse(STDIN)
