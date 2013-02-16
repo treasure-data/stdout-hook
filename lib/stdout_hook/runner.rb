@@ -3,20 +3,6 @@ require 'stdout_hook/router'
 
 module StdoutHook
   class Runner
-    def self.terminate_gracefully(pid, signal)
-      return if pid.nil?
-      
-      begin
-        Process.kill(signal, pid) rescue Errno::ESRCH
-        Timeout.timeout(3) {
-          pid, status = Process.wait2
-          Kernel.exit (status.exitstatus || 0)
-        }
-      rescue Timeout::Error
-        Process.kill("SIGKILL", pid) rescue Errno::ESRCH
-      end
-    end
-
     def self.run(argv)
       opt = Option.parse(argv)
       router = Router.new(opt)
@@ -34,24 +20,21 @@ module StdoutHook
       output.close
 
       if pid.nil?
-        raise "failed to spawn the child process"
+        raise "Failed to spawn the child process"
       end
 
-      trap("INT") {
-        puts "SIGINT received"
-        router.parse(input)
-        terminate_gracefully(pid, 'SIGINT')
-      }
-      trap("TERM") {
-        puts "SIGTERM received"
-        router.parse(input)
-        terminate_gracefully(pid, 'SIGTERM')
+      [:USR1, :USR2, :HUP, :QUIT, :INT, :TERM].each { |signal|
+        trap(signal) {
+          puts "SIG#{signal} received"
+          router.parse(input)  # This line is needed to prevent logs loss
+          Process.kill(signal, pid)
+        }
       }
 
       begin
         router.parse(input)
       rescue => e
-        terminate_gracefully(pid, 'SIGTERM')
+        Process.kill(:TERM, pid)
         STDERR.puts "Unexpected error: message = #{e.message}"
       end
     end
@@ -59,7 +42,7 @@ module StdoutHook
     def self.run_with_stdin(router, opt)
       router.parse(STDIN)
     rescue Interrupt
-      router.parse(STDIN)
+      router.parse(STDIN)  # same as trap in run_with_spawn
     rescue => e
       STDERR.puts "Unexpected error: message = #{e.message}"
     end
