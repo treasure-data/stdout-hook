@@ -37,7 +37,7 @@ module StdoutHook
 
     def route(tag, time, record)
       # TODO: Chain plugins?
-      begin 
+      begin
         @plugin.send(tag, time, record)
       rescue => e
         $stderr.puts "Failed to send an event. Re-create a plugin: #{e}"
