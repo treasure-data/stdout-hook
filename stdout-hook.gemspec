@@ -18,5 +18,5 @@ Gem::Specification.new do |s|
   s.add_dependency 'td-logger', '~> 0.3.19'
   s.add_development_dependency 'bundler', '>= 1.0.0'
   s.add_development_dependency 'rake', '>= 0.8.7'
-  s.add_development_dependency 'rspec', '>= 2.9.0'
+  s.add_development_dependency 'rspec', '>= 2.11'
 end
