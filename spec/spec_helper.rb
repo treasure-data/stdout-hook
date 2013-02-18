@@ -17,3 +17,29 @@ RSpec.configure do |config|
   config.run_all_when_everything_filtered = true
   config.mock_with :rspec
 end
+
+def capture_stdout(&block)
+  original = $stdout
+  captured = $stdout = StringIO.new
+
+  begin
+    yield
+  ensure
+    $stdout = original
+  end
+
+  captured.string
+end
+
+def capture_stderr(&block)
+  original = $stderr
+  captured = $stderr = StringIO.new
+
+  begin
+    yield
+  ensure
+    $stderr = original
+  end
+
+  captured.string
+end
