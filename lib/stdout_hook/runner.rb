@@ -35,7 +35,7 @@ module StdoutHook
         router.parse(input)
       rescue => e
         Process.kill(:TERM, pid)
-        STDERR.puts "Unexpected error: message = #{e.message}"
+        $stderr.puts "Unexpected error: message = #{e.message}"
       end
     end
 
@@ -44,7 +44,7 @@ module StdoutHook
     rescue Interrupt
       router.parse(STDIN)  # same as trap in run_with_spawn
     rescue => e
-      STDERR.puts "Unexpected error: message = #{e.message}"
+      $stderr.puts "Unexpected error: message = #{e.message}"
     end
   end
 end

@@ -1,6 +1,8 @@
 module StdoutHook
   module Plugin
     class Fluentd
+      attr_reader :logger
+
       def initialize(opt)
         require 'fluent/logger'
 

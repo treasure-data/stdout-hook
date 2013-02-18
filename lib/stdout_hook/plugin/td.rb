@@ -1,6 +1,8 @@
 module StdoutHook
   module Plugin
     class TD
+      attr_reader :loggers
+
       def initialize(opt)
         require 'td/client'
         require 'td/logger'

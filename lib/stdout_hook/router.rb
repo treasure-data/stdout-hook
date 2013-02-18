@@ -4,6 +4,8 @@ require 'stdout_hook/plugin/test'
 
 module StdoutHook
   class Router
+    attr_reader :plugin
+
     def initialize(opt)
       require 'yajl'
 
@@ -25,7 +27,7 @@ module StdoutHook
         begin
           record = Yajl.load(m['record'])
         rescue => e
-          STDERR.puts "Failed to parse JSON: #{e}"
+          $stderr.puts "Failed to parse JSON: #{e}"
           next
         end
 
@@ -38,7 +40,7 @@ module StdoutHook
       begin 
         @plugin.send(tag, time, record)
       rescue => e
-        STDERR.puts "Failed to send an event. Re-create a plugin: #{e}"
+        $stderr.puts "Failed to send an event. Re-create a plugin: #{e}"
         @plugin = load_plugin(@opt)
         @plugin.send(tag, time, record)
       end
@@ -55,7 +57,7 @@ module StdoutHook
       when 'test'
         StdoutHook::Plugin::Test.new(opt)
       else
-        raise "Unsupported plugin type: #{mode}"
+        raise "Unsupported plugin type: #{opt.mode}"
       end
     end
   end
