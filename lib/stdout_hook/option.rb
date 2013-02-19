@@ -29,7 +29,7 @@ module StdoutHook
     def parse!(argv)
       require 'shellwords'
 
-      @opt.parse!(argv)
+      @opt.order!(argv)
       @command = Shellwords.shelljoin(argv) unless argv.empty?
 
       case @mode
