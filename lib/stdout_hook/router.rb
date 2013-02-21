@@ -14,6 +14,10 @@ module StdoutHook
       @regexp = /^\s*@\[(?<tag>[^ ]*)\] (?<record>{.*})\s*$/
     end
 
+    def close
+      @plugin.close
+    end
+
     def parse(input)
       until input.eof?
         break unless log = input.gets

@@ -12,7 +12,7 @@ module StdoutHook
       end
 
       def close
-        @loggers.each { |logger|
+        @loggers.each_value { |logger|
           logger.close
         }
       end

@@ -27,6 +27,7 @@ module StdoutHook
         trap(signal) {
           puts "SIG#{signal} received"
           router.parse(input)  # This line is needed to prevent logs loss
+          router.close
           Process.kill(signal, pid)
         }
       }
@@ -35,7 +36,7 @@ module StdoutHook
         router.parse(input)
       rescue => e
         Process.kill(:TERM, pid)
-        $stderr.puts "Unexpected error: message = #{e.message}"
+        print_error(e)
       end
     end
 
@@ -43,8 +44,17 @@ module StdoutHook
       router.parse(STDIN)
     rescue Interrupt
       router.parse(STDIN)  # same as trap in run_with_spawn
+      router.close
     rescue => e
-      $stderr.puts "Unexpected error: message = #{e.message}"
+      print_error(e)
+    end
+
+    def self.print_error(error)
+      time = Time.now
+      $stderr.puts "#{time}: #{error.message}"
+      error.backtrace.each { |msg|
+        $stderr.puts "  #{time}: #{msg}"
+      }
     end
   end
 end
